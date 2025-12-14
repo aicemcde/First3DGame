@@ -34,26 +34,27 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 		sizeof(float) * 8,
 		0
 	);
-	//テクスチャ座標(TexCoord)
+	//法線ベクトル
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(
 		1,
-		2,
+		3,
 		GL_FLOAT,
 		GL_FALSE,
 		sizeof(float) * 8,
 		reinterpret_cast<void*>(sizeof(float) * 3)
 	);
-	//色(Color)
+	//テクスチャ座標(TexCoord)
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(
 		2,
-		3,
+		2,
 		GL_FLOAT,
 		GL_FALSE,
 		sizeof(float) * 8,
-		reinterpret_cast<void*>(sizeof(float) * 5)
+		reinterpret_cast<void*>(sizeof(float) * 6)
 	);
+	
 }
 
 VertexArray::~VertexArray()
