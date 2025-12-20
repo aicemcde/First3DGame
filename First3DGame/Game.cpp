@@ -48,6 +48,7 @@ bool Game::Initialize()
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
 	mWindow = SDL_CreateWindow("Asteroids_OpenGL", 100, 100, 1024, 768, SDL_WINDOW_OPENGL);
 	if (!mWindow)
@@ -78,12 +79,10 @@ bool Game::Initialize()
 
 	glGetError();
 
-	InitSpriteVerts();
-
 	mScene = std::make_unique<Scene>();
 	mResourceManager = std::make_unique<ResourceManager>();
 	mRenderer = std::make_unique<Renderer>(this);
-	if (!mRenderer->Initialize(mScreenSize.x, mScreenSize.y))
+	if (!mRenderer->Initialize())
 	{
 		SDL_Log("Renderer could not initialize!");
 		return false;
@@ -152,19 +151,9 @@ void Game::UpdateGame()
 
 void Game::GenerateOutput()
 {
-	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 	
-	mSpriteShader->SetActive();
-	mSpriteVerts->SetActive();
-
-	glEnable(GL_BLEND);
-	glBlendFunc(
-		GL_SRC_ALPHA,
-		GL_ONE_MINUS_SRC_ALPHA
-	);
-
-	mScene->Draw(mSpriteShader.get());
+	
+	mRenderer->Draw();
 
 	SDL_GL_SwapWindow(mWindow);
 }
@@ -176,37 +165,7 @@ void Game::LoadData()
 
 void Game::UnloadData()
 {
-
-}
-
-void Game::InitSpriteVerts()
-{
-	float vertexBuffer[] = {
-	-0.5f, 0.5f, 0.f,0.0f, 0.f, 0.f, 0.f, 0.f,
-	0.5f, 0.5f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f,
-	0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f, 1.f,
-	-0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f
-	};
-
-	unsigned int indexBuffer[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	mSpriteVerts = std::make_unique<VertexArray>(vertexBuffer, 4, indexBuffer, 6);
-}
-
-bool Game::LoadShaders()
-{
-	mSpriteShader = std::make_unique<Shader>();
-	if (!mSpriteShader->Load("Shaders/Sprite.vert", "Shaders/Sprite.frag"))
-	{
-		return false;
-	}
-	mSpriteShader->SetActive();
-	Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1024.f, 768.f);
-	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
-	return true;
+	mRenderer->UnloadData();
 }
 
 void Game::ColorfulBG(float deltaTime)

@@ -5,13 +5,14 @@
 
 class Renderer
 {
+public:
 	Renderer(class Game* game);
 	~Renderer();
 
-	bool Initialize(float screenWidth, float screenHeight);
+	bool Initialize();
 	void Shutdown();
 	void UnloadData();
-	void Draw(class Shader* shader);
+	void Draw();
 
 	void AddSprite(class SpriteComponent* sprite);
 	void RemoveSprite(class SpriteComponent* sprite);
@@ -24,6 +25,10 @@ private:
 
 	std::unique_ptr<class VertexArray> mSpriteVerts;
 	std::unique_ptr<class Shader> mSpriteShader;
+	std::unique_ptr<class Shader> mMeshShader;
+	
+	Matrix4 mView;
+	Matrix4 mProjection;
 
 	class Game* mGame;
 };

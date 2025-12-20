@@ -19,8 +19,6 @@ public:
 	static class ResourceManager* GetResourceInstance() { return sInstance->mResourceManager.get(); }
 	static class Renderer* GetRendererInstance() { return sInstance->mRenderer.get(); }
 
-	void InitSpriteVerts();
-	bool LoadShaders();
 	class Scene* GetScene() const { return mScene.get(); }
 	class ResourceManager* GetResourceManager() const { return mResourceManager.get(); }
 	const Vector2& GetScreenSize() const { return mScreenSize; }
