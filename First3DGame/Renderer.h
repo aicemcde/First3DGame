@@ -22,6 +22,7 @@ private:
 	void CreateSpriteVerts();
 
 	std::vector<class SpriteComponent*> mSprites;
+	std::vector<class MeshComponent*> mMeshComps;
 
 	std::unique_ptr<class VertexArray> mSpriteVerts;
 	std::unique_ptr<class Shader> mSpriteShader;

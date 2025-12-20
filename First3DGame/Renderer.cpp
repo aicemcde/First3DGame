@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "VertexArray.h"
 #include "Game.h"
+#include "MeshComponent.h"
 
 
 Renderer::Renderer(Game* game)
@@ -43,21 +44,32 @@ void Renderer::UnloadData()
 
 void Renderer::Draw()
 {
+	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	mMeshShader->SetActive();
+	mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
+
+	for (auto mc : mMeshComps)
+	{
+		mc->Draw(mMeshShader.get());
+	}
+
+
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(
+		GL_SRC_ALPHA,
+		GL_ONE_MINUS_SRC_ALPHA
+	);
+
+	mSpriteShader->SetActive();
+	mSpriteVerts->SetActive();
+
 	for (auto sprite : mSprites)
 	{
-		glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		mSpriteShader->SetActive();
-		mSpriteVerts->SetActive();
-
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_BLEND);
-		glBlendFunc(
-			GL_SRC_ALPHA,
-			GL_ONE_MINUS_SRC_ALPHA
-		);
-
 		sprite->Draw(mSpriteShader.get());
 	}
 }
