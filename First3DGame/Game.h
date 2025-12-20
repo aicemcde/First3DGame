@@ -17,6 +17,7 @@ public:
 	static Game& Get() { return *sInstance; }
 	static class Scene* GetSceneInstance() { return sInstance->mScene.get(); }
 	static class ResourceManager* GetResourceInstance() { return sInstance->mResourceManager.get(); }
+	static class Renderer* GetRendererInstance() { return sInstance->mRenderer.get(); }
 
 	void InitSpriteVerts();
 	bool LoadShaders();
@@ -45,6 +46,7 @@ private:
 
 	std::unique_ptr<class Scene> mScene;
 	std::unique_ptr<class ResourceManager> mResourceManager;
+	std::unique_ptr<class Renderer> mRenderer;
 
 	Uint32 mTicksCount;
 

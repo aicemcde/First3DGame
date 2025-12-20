@@ -1,0 +1,23 @@
+#include <string>
+#include <vector>
+#include <memory>
+
+class Mesh
+{
+public:
+	Mesh();
+	~Mesh();
+
+	bool Load(const std::string& fileName, class Game* game);
+	void Unload();
+
+	class VertexArray* GetVertexArray() { return mVertexArray.get(); }
+	class Texture* GetTexture(size_t index);
+	const std::string& GetShaderName() const { return mShaderName; }
+	float GetRadius() const { return mRadius; }
+private:
+	std::vector<class Texture*> mTexture;
+	std::unique_ptr<VertexArray> mVertexArray;
+	std::string mShaderName;
+	float mRadius;
+};

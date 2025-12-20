@@ -6,6 +6,7 @@
 #include "Actor.h"
 #include "ResourceManager.h"
 #include <SDL_ttf.h>
+#include "Renderer.h"
 
 
 Game* Game::sInstance = nullptr;
@@ -77,16 +78,16 @@ bool Game::Initialize()
 
 	glGetError();
 
-	if (!LoadShaders())
-	{
-		SDL_Log("Failed to load shader");
-		return false;
-	}
-
 	InitSpriteVerts();
 
 	mScene = std::make_unique<Scene>();
 	mResourceManager = std::make_unique<ResourceManager>();
+	mRenderer = std::make_unique<Renderer>(this);
+	if (!mRenderer->Initialize(mScreenSize.x, mScreenSize.y))
+	{
+		SDL_Log("Renderer could not initialize!");
+		return false;
+	}
 
 	LoadData();
 
