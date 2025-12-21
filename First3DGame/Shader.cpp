@@ -120,3 +120,22 @@ void Shader::SetMatrixUniform(const char* name, const Matrix4& matrix)
 		matrix.GetAsFloatPtr()
 	);
 }
+
+void Shader::SetVectorUniform(const char* name, const Vector3& uni)
+{
+	GLuint loc = glGetUniformLocation(mShaderProgram, name);
+	glUniform3fv(
+		loc,
+		1,
+		uni.GetAsFloatPtr()
+	);
+}
+
+void Shader::SetFloatUniform(const char* name, const float uni)
+{
+	GLuint loc = glGetUniformLocation(mShaderProgram, name);
+	glUniform1f(
+		loc,
+		uni
+	);
+}

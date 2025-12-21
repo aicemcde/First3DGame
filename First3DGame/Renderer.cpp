@@ -130,3 +130,14 @@ bool Renderer::LoadShaders()
 	mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
 	return true;
 }
+
+void Renderer::SetLightUniforms(Shader* shader)
+{
+	Matrix4 invView = mView;
+	invView.Invert();
+	shader->SetVectorUniform("uCameraPos", invView.GetTranslation());
+	shader->SetVectorUniform("uAmbientLight", mAmbientLight);
+	shader->SetVectorUniform("uDirLight.mDirection", mDirLight.mDirection);
+	shader->SetVectorUniform("uDirLight.mDiffuseColor", mDirLight.mDiffuseColor);
+	shader->SetVectorUniform("uDirLight.mSpecColor", mDirLight.mSpecColor);
+}

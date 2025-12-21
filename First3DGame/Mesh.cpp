@@ -7,6 +7,9 @@
 #include <rapidjson/document.h>
 #include "Math.h"
 #include "VertexArray.h"
+#include "Renderer.h"
+#include "Game.h"
+#include "ResourceManager.h"
 
 Mesh::Mesh()
 	:mVertexArray(nullptr)
@@ -20,7 +23,7 @@ Mesh::~Mesh()
 
 }
 
-bool Mesh::Load(const std::string& fileName, Game* game)
+bool Mesh::Load(const std::string& fileName, Renderer* renderer)
 {
 	std::ifstream file(fileName);
 	if (!file.is_open())
@@ -59,6 +62,19 @@ bool Mesh::Load(const std::string& fileName, Game* game)
 	{
 		SDL_Log("Mesh %s has no textures, there should be at least one", fileName.c_str());
 		return false;
+	}
+
+	mSpecPower = static_cast<float>(doc["specularPower"].GetDouble());
+
+	for (rapidjson::SizeType i = 0; i < textures.Size(); ++i)
+	{
+		std::string texName = textures[i].GetString();
+		Texture* t = Game::GetResourceInstance()->GetTexture(texName);
+		if (t == nullptr)
+		{
+			t = Game::GetResourceInstance()->GetTexture("Assets/Default.png");
+		}
+		mTextures.emplace_back(t);
 	}
 
 	const rapidjson::Value& vertsJson = doc["vertices"];
@@ -128,9 +144,9 @@ void Mesh::Unload()
 
 Texture* Mesh::GetTexture(size_t index)
 {
-	if (index < mTexture.size())
+	if (index < mTextures.size())
 	{
-		return mTexture[index];
+		return mTextures[index];
 	}
 	else
 	{

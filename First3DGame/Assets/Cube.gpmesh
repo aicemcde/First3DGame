@@ -2,9 +2,10 @@
 	"version":1,
 	"vertexformat":"PosNormTex",
 	"shader":"BasicMesh",
-	"textures":[
+	"textures": [
 		"Assets/Cube.png"
 	],
+	"specularPower": 100.0,
 	"vertices":[
 		[1.0, 1.0, -1.0, 0.57, 0.57, -0.57, 0.66, 0.33],
 		[1.0, -1.0, -1.0, 0.57, -0.57, -0.57, 0.66, 0.0],
