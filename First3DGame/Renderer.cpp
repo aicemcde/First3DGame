@@ -119,7 +119,7 @@ bool Renderer::LoadShaders()
 	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
 	mMeshShader = std::make_unique<Shader>();
-	if (!mMeshShader->Load("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag"))
+	if (!mMeshShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag"))
 	{
 		return false;
 	}

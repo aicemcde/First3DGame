@@ -27,6 +27,7 @@ public:
 	class Mesh* GetMesh(const std::string& fileName);
 
 	void SetLightUniforms(class Shader* shader);
+	void SetViewMatrix(const Matrix4& view) noexcept { mView = view; }
 private:
 	bool LoadShaders();
 	void CreateSpriteVerts();

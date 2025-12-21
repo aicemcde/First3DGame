@@ -15,7 +15,7 @@ public:
 		EDead
 	};
 
-	Actor(class Game* game);
+	explicit Actor(class Game* game);
 	virtual ~Actor();
 
 	void Update(float deltaTime);
