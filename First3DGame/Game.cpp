@@ -151,8 +151,6 @@ void Game::UpdateGame()
 
 void Game::GenerateOutput()
 {
-	
-	
 	mRenderer->Draw();
 
 	SDL_GL_SwapWindow(mWindow);

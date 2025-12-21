@@ -15,11 +15,12 @@ float CircleComponent::GetRadius() const
 
 bool Intersect(const CircleComponent& a, const CircleComponent& b)
 {
-	Vector2 diff = a.GetOwner()->GetPosition() - b.GetOwner()->GetPosition();
+	/*Vector2 diff = a.GetOwner()->GetPosition() - b.GetOwner()->GetPosition();
 	float distSq = diff.LengthSq();
 
 	float radiiSq = a.GetRadius() + b.GetRadius();
 	radiiSq *= radiiSq;
 
-	return distSq <= radiiSq;
+	return distSq <= radiiSq;*/
+	return false;
 }

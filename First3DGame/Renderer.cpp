@@ -110,7 +110,7 @@ void Renderer::CreateSpriteVerts()
 bool Renderer::LoadShaders()
 { 
 	mSpriteShader = std::make_unique<Shader>();
-	if (!mSpriteShader->Load("Shader/Sprite.vert", "Shader/Sprite.frag"))
+	if (!mSpriteShader->Load("Shaders/Sprite.vert", "Shaders/Sprite.frag"))
 	{
 		return false;
 	}
@@ -119,7 +119,7 @@ bool Renderer::LoadShaders()
 	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
 	mMeshShader = std::make_unique<Shader>();
-	if (!mMeshShader->Load("Shader/BasicMesh.vert", "Shader/BasicMesh.frag"))
+	if (!mMeshShader->Load("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag"))
 	{
 		return false;
 	}

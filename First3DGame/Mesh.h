@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <vector>
 #include <memory>
@@ -17,7 +18,7 @@ public:
 	float GetRadius() const { return mRadius; }
 private:
 	std::vector<class Texture*> mTexture;
-	std::unique_ptr<VertexArray> mVertexArray;
+	std::unique_ptr<class VertexArray> mVertexArray;
 	std::string mShaderName;
 	float mRadius;
 };

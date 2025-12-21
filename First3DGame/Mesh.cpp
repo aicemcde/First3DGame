@@ -1,9 +1,12 @@
+#define _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
+
 #include "Mesh.h"
 #include <fstream>
 #include <sstream>
 #include <SDL.h>
 #include <rapidjson/document.h>
 #include "Math.h"
+#include "VertexArray.h"
 
 Mesh::Mesh()
 	:mVertexArray(nullptr)
