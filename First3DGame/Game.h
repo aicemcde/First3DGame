@@ -35,16 +35,13 @@ private:
 	static Game* sInstance;
 	Vector2 mScreenSize;
 
-	SDL_Window* mWindow = nullptr;
 	bool mIsRunning = false;
-	SDL_GLContext mContext;
-
-	std::unique_ptr<class VertexArray> mSpriteVerts = nullptr;
-	std::unique_ptr<class Shader> mSpriteShader = nullptr;
 
 	std::unique_ptr<class Scene> mScene;
 	std::unique_ptr<class ResourceManager> mResourceManager;
 	std::unique_ptr<class Renderer> mRenderer;
+
+	class CameraActor* mCameraActor;
 
 	Uint32 mTicksCount;
 

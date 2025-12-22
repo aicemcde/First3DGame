@@ -1,7 +1,11 @@
 #include "ResourceManager.h"
 #include "Texture.h"
+#include "Mesh.h"
+#include "Game.h"
+#include "Renderer.h"
 
-ResourceManager::ResourceManager()
+ResourceManager::ResourceManager(Game* game)
+	:mGame(game)
 {
 
 }
@@ -29,6 +33,27 @@ Texture* ResourceManager::GetTexture(const std::string& fileName)
 		}
 	}
 	return tex;
+}
+
+Mesh* ResourceManager::GetMesh(const std::string& fileName)
+{
+	Mesh* m = nullptr;
+	auto iter = mMeshes.find(fileName);
+	if (iter != mMeshes.end())
+	{
+		m = iter->second.get();
+
+	}
+	else
+	{
+		std::unique_ptr<Mesh> ptr = std::make_unique<Mesh>();
+		if (ptr->Load(fileName, mGame->GetRendererInstance()))
+		{
+			m = ptr.get();
+			mMeshes.emplace(fileName, std::move(ptr));
+		}
+	}
+	return m;
 }
 
 void ResourceManager::Unload()

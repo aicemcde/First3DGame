@@ -2,7 +2,7 @@
 
 struct DirectionalLight
 {
-	vec3 mDirction;
+	vec3 mDirection;
 	vec3 mDiffuseColor;
 	vec3 mSpecColor;
 };
@@ -16,7 +16,7 @@ out vec4 outColor;
 uniform vec3 uCameraPos;
 uniform vec3 uAmbientLight;
 uniform float uSpecPower;
-uniform DirctionalLight uDirLight;
+uniform DirectionalLight uDirLight;
 uniform sampler2D uTexture;
 
 void main()

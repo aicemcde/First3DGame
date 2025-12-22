@@ -6,6 +6,7 @@
 #include "VertexArray.h"
 #include "Game.h"
 #include "MeshComponent.h"
+#include <SDL_ttf.h>
 
 
 Renderer::Renderer(Game* game)
@@ -21,6 +22,47 @@ Renderer::~Renderer()
 
 bool Renderer::Initialize()
 {
+	//ランタイムチェックはCreateWindowでできるので、SetAttributeでする必要はない
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+
+	mWindow = SDL_CreateWindow("Asteroids_OpenGL", 100, 100, 1024, 768, SDL_WINDOW_OPENGL);
+	if (!mWindow)
+	{
+		SDL_Log("SDL cannot create Window! SDL_Error : %s", SDL_GetError());
+		return false;
+	}
+
+	if (TTF_Init() != 0)
+	{
+		SDL_Log("TTF could not initialize!");
+		return false;
+	}
+
+	mContext = SDL_GL_CreateContext(mWindow);
+
+	glewExperimental = GL_TRUE;
+	if (glewInit() != GLEW_OK)
+	{
+		SDL_Log("GLEW could not initialize!");
+		return false;
+	}
+
+	if (SDL_GL_SetSwapInterval(1) < 0)
+	{
+		SDL_Log("Warning: Unable to set VSync! SDL Error: %s", SDL_GetError());
+	}
+
+	glGetError();
+
 	if (!LoadShaders())
 	{
 		SDL_Log("Failed to load shader");
@@ -35,11 +77,13 @@ bool Renderer::Initialize()
 void Renderer::Shutdown()
 {
 	UnloadData();
+	SDL_GL_DeleteContext(mContext);
+	SDL_DestroyWindow(mWindow);
 }
 
 void Renderer::UnloadData()
 {
-
+	mSprites.clear();
 }
 
 void Renderer::Draw()
@@ -72,6 +116,8 @@ void Renderer::Draw()
 	{
 		sprite->Draw(mSpriteShader.get());
 	}
+
+	SDL_GL_SwapWindow(mWindow);
 }
 
 void Renderer::AddSprite(SpriteComponent* sc)
