@@ -42,14 +42,6 @@ void Scene::Update(float deltaTime)
 	mActors.erase(iter, mActors.end());
 }
 
-void Scene::Draw(Shader* shader)
-{
-	for (auto& sprite : mSpriteComps)
-	{
-		sprite->Draw(shader);
-	}
-}
-
 void Scene::Unload()
 {
 	mActors.clear();
@@ -93,22 +85,6 @@ void Scene::RemoveActor(Actor* actor)
 			std::iter_swap(iter, mActors.end() - 1);
 			mActors.pop_back();
 		}
-	}
-}
-
-void Scene::AddSpriteComponent(SpriteComponent* sc)
-{
-	int myOrder = sc->GetUpdateOrder();
-	auto iter = std::ranges::lower_bound(mSpriteComps, myOrder, {}, &SpriteComponent::GetUpdateOrder);
-	mSpriteComps.insert(iter, sc);
-}
-
-void Scene::RemoveSpriteComponent(SpriteComponent* sc)
-{
-	auto iter = std::find(mSpriteComps.begin(), mSpriteComps.end(), sc);
-	if (iter != mSpriteComps.end())
-	{
-		mSpriteComps.erase(iter);
 	}
 }
 

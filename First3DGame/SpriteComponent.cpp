@@ -4,7 +4,7 @@
 #include "Actor.h"
 #include "Shader.h"
 #include "Game.h"
-#include "Scene.h"
+#include "Renderer.h"
 #include "Texture.h"
 
 SpriteComponent::SpriteComponent(Actor* owner, int updateOrder)
@@ -13,12 +13,12 @@ SpriteComponent::SpriteComponent(Actor* owner, int updateOrder)
 	, mTexWidth(0)
 	, mTexture(nullptr)
 {
-	Game::Get().GetScene()->AddSpriteComponent(this);
+	Game::GetRendererInstance()->AddSprite(this);
 }
 
 SpriteComponent::~SpriteComponent()
 {
-	Game::Get().GetScene()->RemoveSpriteComponent(this);
+	
 }
 
 void SpriteComponent::Draw(Shader* shader)
