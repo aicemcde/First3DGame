@@ -48,6 +48,11 @@ bool Renderer::Initialize()
 	}
 
 	mContext = SDL_GL_CreateContext(mWindow);
+	if (!mContext)
+	{
+		SDL_Log("Failed to create context : %s", SDL_GetError());
+		return false;
+	}
 
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
@@ -76,6 +81,8 @@ bool Renderer::Initialize()
 
 void Renderer::Shutdown()
 {
+	mSpriteShader->Unload();
+	mMeshShader->Unload();
 	UnloadData();
 	SDL_GL_DeleteContext(mContext);
 	SDL_DestroyWindow(mWindow);
@@ -84,17 +91,19 @@ void Renderer::Shutdown()
 void Renderer::UnloadData()
 {
 	mSprites.clear();
+	mMeshComps.clear();
 }
 
 void Renderer::Draw()
 {
-	glClearColor(0.86f, 0.86f, 0.86f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	mMeshShader->SetActive();
 	mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
+	SetLightUniforms(mMeshShader.get());
 
 	for (auto mc : mMeshComps)
 	{
@@ -104,10 +113,8 @@ void Renderer::Draw()
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	glBlendFunc(
-		GL_SRC_ALPHA,
-		GL_ONE_MINUS_SRC_ALPHA
-	);
+	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
 	mSpriteShader->SetActive();
 	mSpriteVerts->SetActive();
@@ -133,6 +140,21 @@ void Renderer::RemoveSprite(SpriteComponent* sc)
 	if (iter != mSprites.end())
 	{
 		mSprites.erase(iter);
+	}
+}
+
+void Renderer::AddMeshComp(MeshComponent* mc)
+{
+	mMeshComps.emplace_back(mc);
+}
+
+void Renderer::RemoveMeshComp(MeshComponent* mc)
+{
+	auto iter = std::ranges::find(mMeshComps, mc);
+	if (iter != mMeshComps.end())
+	{
+		std::iter_swap(iter, mMeshComps.end() - 1);
+		mMeshComps.pop_back();
 	}
 }
 

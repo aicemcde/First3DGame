@@ -26,6 +26,9 @@ public:
 	void AddSprite(class SpriteComponent* sprite);
 	void RemoveSprite(class SpriteComponent* sprite);
 
+	void AddMeshComp(class MeshComponent* meshcomp);
+	void RemoveMeshComp(class MeshComponent* mc);
+
 	void SetLightUniforms(class Shader* shader);
 	void SetViewMatrix(const Matrix4& view) noexcept { mView = view; }
 	void SetAmbientLight(const Vector3& ambient) noexcept { mAmbientLight = ambient; }

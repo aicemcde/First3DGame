@@ -3,6 +3,8 @@
 
 VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 	const unsigned int* indices, unsigned int numIndices)
+	:mNumVerts(numVerts)
+	,mNumIndices(numIndices)
 {
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);

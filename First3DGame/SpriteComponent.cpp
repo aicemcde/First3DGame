@@ -18,7 +18,7 @@ SpriteComponent::SpriteComponent(Actor* owner, int updateOrder)
 
 SpriteComponent::~SpriteComponent()
 {
-	Game::GetRendererInstance()->RemoveSprite(this);
+	
 }
 
 void SpriteComponent::Draw(Shader* shader)

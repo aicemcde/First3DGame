@@ -58,17 +58,22 @@ bool Game::Initialize()
 
 void Game::Shutdown()
 {
-	mRenderer->Shutdown();
+	UnloadData();
 	SDL_Quit();
 }
 
 void Game::RunLoop()
 {
+	GLenum err;
 	while (mIsRunning)
 	{
 		ProcessInput();
 		UpdateGame();
 		GenerateOutput();
+		while ((err = glGetError()) != GL_NO_ERROR)
+		{
+			SDL_Log("GL_Error : %d", err);
+		}
 	}
 }
 
@@ -144,7 +149,7 @@ void Game::LoadData()
 		for (int j = 0; j < 10; ++j)
 		{
 			a = std::make_unique<PlaneActor>(this);
-			a->SetPosition(Vector3(start + i * size, j * size, -100.0f));
+			a->SetPosition(Vector3(start + i * size, start + j * size, -100.0f));
 			mScene->AddActor(std::move(a));
 		}
 	}
