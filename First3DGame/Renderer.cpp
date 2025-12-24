@@ -233,6 +233,13 @@ void Renderer::SetLightUniforms(Shader* shader)
 	shader->SetVectorUniform("uDirLight.mDirection", mDirLight.mDirection);
 	shader->SetVectorUniform("uDirLight.mDiffuseColor", mDirLight.mDiffuseColor);
 	shader->SetVectorUniform("uDirLight.mSpecColor", mDirLight.mSpecColor);
+
+	shader->SetVectorUniform("uPointLight.mWorldPos", mPointLight.mWorldPos);
+	shader->SetVectorUniform("uPointLight.mDiffuseColor", mPointLight.mDiffuseColor);
+	shader->SetVectorUniform("uPointLight.mSpecColor", mPointLight.mSpecColor);
+	shader->SetFloatUniform("uPointLight.mConstant", mPointLight.mConstant);
+	shader->SetFloatUniform("uPointLight.mLinear", mPointLight.mLinear);
+	shader->SetFloatUniform("uPointLight.mQuadratic", mPointLight.mQuadratic);
 }
 
 void Renderer::SetShaderUniforms(Shader* shader)

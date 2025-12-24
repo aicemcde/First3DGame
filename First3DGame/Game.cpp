@@ -134,6 +134,7 @@ void Game::LoadData()
 	a->SetRotation(q);
 	std::unique_ptr<MeshComponent> mc = std::make_unique<MeshComponent>(a.get());
 	mc->SetMesh(mResourceManager->GetMesh("Assets/Cube.gpmesh"));
+	mc->SetShader(mRenderer->GetPhongShader());
 	a->AddComponent(std::move(mc));
 	mScene->AddActor(std::move(a));
 
@@ -143,14 +144,6 @@ void Game::LoadData()
 	mc = std::make_unique<MeshComponent>(a.get());
 	mc->SetMesh(mResourceManager->GetMesh("Assets/Sphere.gpmesh"));
 	mc->SetShader(mRenderer->GetPhongShader());
-	a->AddComponent(std::move(mc));
-	mScene->AddActor(std::move(a));
-
-	a = std::make_unique<Actor>(this);
-	a->SetPosition(Vector3(200.0f, -150.0f, 0.0f));
-	a->SetScale(3.0f);
-	mc = std::make_unique<MeshComponent>(a.get());
-	mc->SetMesh(mResourceManager->GetMesh("Assets/Sphere.gpmesh"));
 	a->AddComponent(std::move(mc));
 	mScene->AddActor(std::move(a));
 
@@ -194,11 +187,22 @@ void Game::LoadData()
 		mScene->AddActor(std::move(a));
 	}
 
-	mRenderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
+	mRenderer->SetAmbientLight(Vector3(0.1f, 0.1f, 0.1f));
+	mRenderer->SetAmbientLight(Vector3::Zero);
 	DirectionalLight& dir = mRenderer->GetDirectionalLight();
 	dir.mDirection = Vector3(0.0f, -0.70f, -0.70f);
 	dir.mDiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
+	dir.mDiffuseColor = Vector3::Zero;
 	dir.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
+	dir.mSpecColor = Vector3::Zero;
+
+	PointLight& point = mRenderer->GetPointLight();
+	point.mWorldPos = Vector3(200.0f, 0.0f, 50.0f);
+	point.mDiffuseColor = Vector3::UnitX;
+	point.mSpecColor = Vector3(1.0f, 1.0f, 1.0f);
+	point.mConstant = 1.0f;
+	point.mLinear = 0.09f;
+	point.mQuadratic = 0.032f;
 
 	std::unique_ptr<CameraActor> ca = std::make_unique<CameraActor>(this);
 	mCameraActor = ca.get();

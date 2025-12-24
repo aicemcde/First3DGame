@@ -12,6 +12,16 @@ struct DirectionalLight
 	Vector3 mSpecColor;
 };
 
+struct PointLight
+{
+	Vector3 mWorldPos;
+	Vector3 mDiffuseColor;
+	Vector3 mSpecColor;
+	float mConstant;
+	float mLinear;
+	float mQuadratic;
+};
+
 class Renderer
 {
 public:
@@ -33,6 +43,7 @@ public:
 	void SetViewMatrix(const Matrix4& view) noexcept { mView = view; }
 	void SetAmbientLight(const Vector3& ambient) noexcept { mAmbientLight = ambient; }
 	DirectionalLight& GetDirectionalLight() noexcept { return mDirLight; }
+	PointLight& GetPointLight() noexcept { return mPointLight; }
 
 	Shader* GetPhongShader() const noexcept { return mMeshShader.get(); }
 private:
@@ -55,6 +66,7 @@ private:
 	Matrix4 mProjection;
 	Vector3 mAmbientLight;
 	DirectionalLight mDirLight;
+	PointLight mPointLight;
 
 	class Game* mGame;
 };

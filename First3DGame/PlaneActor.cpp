@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "ResourceManager.h"
 #include "Mesh.h"
+#include "Renderer.h"
 
 PlaneActor::PlaneActor(class Game* game)
 	:Actor(game)
