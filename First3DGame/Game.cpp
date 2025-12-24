@@ -201,8 +201,8 @@ void Game::LoadData()
 	point.mDiffuseColor = Vector3::UnitX;
 	point.mSpecColor = Vector3(1.0f, 1.0f, 1.0f);
 	point.mConstant = 1.0f;
-	point.mLinear = 0.09f;
-	point.mQuadratic = 0.032f;
+	point.mLinear = 0.0007f;
+	point.mQuadratic = 0.00002f;
 
 	std::unique_ptr<CameraActor> ca = std::make_unique<CameraActor>(this);
 	mCameraActor = ca.get();
