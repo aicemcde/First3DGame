@@ -13,6 +13,7 @@ MeshComponent::MeshComponent(Actor* owner)
 	:Component(owner)
 	, mMesh(nullptr)
 	, mTextureIndex(0)
+	,mShader(nullptr)
 {
 	Game::GetRendererInstance()->AddMeshComp(this);
 }

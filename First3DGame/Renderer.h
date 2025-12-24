@@ -33,9 +33,12 @@ public:
 	void SetViewMatrix(const Matrix4& view) noexcept { mView = view; }
 	void SetAmbientLight(const Vector3& ambient) noexcept { mAmbientLight = ambient; }
 	DirectionalLight& GetDirectionalLight() noexcept { return mDirLight; }
+
+	Shader* GetPhongShader() const noexcept { return mMeshShader.get(); }
 private:
 	bool LoadShaders();
 	void CreateSpriteVerts();
+	void SetShaderUniforms(Shader* shader);
 
 	SDL_Window* mWindow = nullptr;
 	SDL_GLContext mContext;
@@ -46,6 +49,7 @@ private:
 	std::unique_ptr<class VertexArray> mSpriteVerts;
 	std::unique_ptr<class Shader> mSpriteShader;
 	std::unique_ptr<class Shader> mMeshShader;
+	std::unique_ptr<class Shader> mBasicMeshShader;
 	
 	Matrix4 mView;
 	Matrix4 mProjection;

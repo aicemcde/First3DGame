@@ -34,12 +34,10 @@ void Scene::Update(float deltaTime)
 	}
 	mPendingActors.clear();
 
-	auto iter = std::remove_if(mActors.begin(), mActors.end(),
-		[](const std::unique_ptr<Actor>& actor)
+	std::erase_if(mActors, [](const std::unique_ptr<Actor>& actor)
 		{
 			return actor->GetState() == Actor::EDead;
 		});
-	mActors.erase(iter, mActors.end());
 }
 
 void Scene::Unload()
@@ -84,8 +82,12 @@ void Scene::RemoveActor(Actor* actor)
 		{
 			std::iter_swap(iter, mActors.end() - 1);
 			mActors.pop_back();
+			return;
 		}
 	}
+
+	actor->SetState(Actor::EDead);
+	
 }
 
 void Scene::InputActor(const uint8_t* keyState)

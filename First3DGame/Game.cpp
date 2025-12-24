@@ -105,7 +105,10 @@ void Game::ProcessInput()
 
 void Game::UpdateGame()
 {
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16));
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
+	{
+		SDL_Delay(1);
+	}
 	float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.0f;
 	mTicksCount = SDL_GetTicks();
 	if (deltaTime > 0.05f)
@@ -136,6 +139,15 @@ void Game::LoadData()
 
 	a = std::make_unique<Actor>(this);
 	a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
+	a->SetScale(3.0f);
+	mc = std::make_unique<MeshComponent>(a.get());
+	mc->SetMesh(mResourceManager->GetMesh("Assets/Sphere.gpmesh"));
+	mc->SetShader(mRenderer->GetPhongShader());
+	a->AddComponent(std::move(mc));
+	mScene->AddActor(std::move(a));
+
+	a = std::make_unique<Actor>(this);
+	a->SetPosition(Vector3(200.0f, -150.0f, 0.0f));
 	a->SetScale(3.0f);
 	mc = std::make_unique<MeshComponent>(a.get());
 	mc->SetMesh(mResourceManager->GetMesh("Assets/Sphere.gpmesh"));

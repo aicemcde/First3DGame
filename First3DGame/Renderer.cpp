@@ -101,13 +101,33 @@ void Renderer::Draw()
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	mMeshShader->SetActive();
-	mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
-	SetLightUniforms(mMeshShader.get());
+
+	std::sort(mMeshComps.begin(), mMeshComps.end(),
+		[](MeshComponent* a, MeshComponent* b)
+		{
+			return a->GetShader() < b->GetShader();
+		});
+	
+	Shader* activeShader = nullptr;
 
 	for (auto mc : mMeshComps)
 	{
-		mc->Draw(mMeshShader.get());
+		Shader* shaderToUse = mc->GetShader();
+		if (!shaderToUse)
+		{
+			shaderToUse = mBasicMeshShader.get();
+		}
+
+		if (activeShader != shaderToUse)
+		{
+			activeShader = shaderToUse;
+
+			activeShader->SetActive();
+
+			SetShaderUniforms(activeShader);
+		}
+
+		mc->Draw(activeShader);
 	}
 
 
@@ -186,16 +206,21 @@ bool Renderer::LoadShaders()
 	Matrix4 viewProj = Matrix4::CreateSimpleViewProj(1024.f, 768.f);
 	mSpriteShader->SetMatrixUniform("uViewProj", viewProj);
 
+	mView = Matrix4::CreateLookAt(Vector3::Zero, Vector3::UnitX, Vector3::UnitZ);
+	mProjection = Matrix4::CreatePerspectiveFOV(Math::ToRadians(70.0f),
+		mGame->GetScreenSize().x, mGame->GetScreenSize().y, 25.0f, 10000.0f);
+
 	mMeshShader = std::make_unique<Shader>();
 	if (!mMeshShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag"))
 	{
 		return false;
 	}
-	mMeshShader->SetActive();
-	mView = Matrix4::CreateLookAt(Vector3::Zero, Vector3::UnitX, Vector3::UnitZ);
-	mProjection = Matrix4::CreatePerspectiveFOV(Math::ToRadians(70.0f),
-		mGame->GetScreenSize().x, mGame->GetScreenSize().y, 25.0f, 10000.0f);
-	mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
+
+	mBasicMeshShader = std::make_unique<Shader>();
+	if (!mBasicMeshShader->Load("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag"))
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -208,4 +233,13 @@ void Renderer::SetLightUniforms(Shader* shader)
 	shader->SetVectorUniform("uDirLight.mDirection", mDirLight.mDirection);
 	shader->SetVectorUniform("uDirLight.mDiffuseColor", mDirLight.mDiffuseColor);
 	shader->SetVectorUniform("uDirLight.mSpecColor", mDirLight.mSpecColor);
+}
+
+void Renderer::SetShaderUniforms(Shader* shader)
+{
+	shader->SetActive();
+
+	shader->SetMatrixUniform("uViewProj", mView * mProjection);
+
+	SetLightUniforms(shader);
 }
